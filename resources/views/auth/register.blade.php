@@ -1,4 +1,6 @@
 <x-guest-layout>
+<div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+<img src="{{ asset('images/logo.gif') }}" alt="Logo" class="w-40 h-40 mx-auto mb-4">
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -49,4 +51,5 @@
             </x-primary-button>
         </div>
     </form>
+</div>
 </x-guest-layout>

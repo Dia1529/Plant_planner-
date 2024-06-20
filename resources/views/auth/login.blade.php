@@ -1,7 +1,8 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
+    <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+    <img src="{{ asset('images/logo.gif') }}" alt="Logo" class="w-40 h-40 mx-auto mb-4">
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -32,16 +33,24 @@
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
-                </a>
+            </a>
+            
             @endif
-
-            <x-primary-button class="ms-3">
+            <div class="flex items-center justify-end mt-4">   
+            <x-primary-button class="ms-5">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+        
+        {{ __("Haven't registered yet?") }}
+        <a href="{{ route('register') }}" class="text-indigo-600 hover:text-indigo-800">
+            {{ __('Register now') }}
+        </a>
+    </div>
     </form>
+ </div>
 </x-guest-layout>

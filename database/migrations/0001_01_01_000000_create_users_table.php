@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('droplet_count')->default(0); // Droplet count column
             $table->rememberToken();
             $table->timestamps();
         });
@@ -42,8 +43,27 @@ return new class extends Migration
      */
     public function down(): void
     {
+        
+   
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
 };
+
+class AddDropletCountToUsersTable extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('droplet_count')->default(0);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('droplet_count');
+        });
+    }
+}
