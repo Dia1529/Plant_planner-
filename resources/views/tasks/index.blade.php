@@ -86,7 +86,3 @@
         }
     </script>
 </x-app-layout>
-<<<<<<< HEAD
-        
-=======
->>>>>>> afdaaea (Initial commit)

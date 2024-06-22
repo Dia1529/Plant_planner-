@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\GardenController;
@@ -49,10 +50,17 @@ Route::middleware('auth')->group(function () {
 });
 
 // Garden
-Route::middleware('auth')->group(function () {
-    Route::get('garden', [GardenController::class, 'index'])->name('garden.index');
-});
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/garden', [GardenController::class, 'index'])->name('garden.index');
+    Route::post('/garden/{plant}/water', [GardenController::class, 'water'])->name('garden.water');
+    Route::post('/garden/{plant}/memo', [GardenController::class, 'memo'])->name('garden.memo');
+});
+//Shop 
+Route::middleware('auth')->group(function () {
+    Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+    Route::post('/shop/buy', [ShopController::class, 'buy'])->name('shop.buy');
+});
 // About and Fund routes
 Route::get('/about', function () {
     return view('about');
