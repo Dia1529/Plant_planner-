@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Plant;
+use function App\Helpers\getPlantStageDescription;
 
 class GardenController extends Controller
 {
@@ -11,6 +12,12 @@ class GardenController extends Controller
     {
         $user = auth()->user();
         $plants = $user->plants; // Fetch all plants of the logged-in user
+
+        foreach ($plants as $plant) {
+            $plant->stageDescription = getPlantStageDescription($plant->stage);
+            $plant->wateringProgress = $this->calculateOverallProgress($plant);
+        }
+
         return view('garden.index', compact('plants'));
     }
 
@@ -24,16 +31,23 @@ class GardenController extends Controller
         }
 
         // Ensure the user has enough droplets
-        $dropletsRequired = $this->getDropletsRequired($plant->stage);
-        if ($user->droplet_count < $dropletsRequired) {
+        if ($user->droplet_count < 1) {
             return back()->with('error', 'Not enough droplets to water the plant.');
         }
 
-        // Deduct droplets and advance plant stage
-        $user->droplet_count -= $dropletsRequired;
+        // Deduct one droplet
+        $user->droplet_count -= 1;
         $user->save();
 
-        $plant->stage++;
+        // Increment current watering count
+        $plant->current_watering_count += 1;
+
+        // Check if the plant should advance to the next stage
+        if ($plant->current_watering_count >= $this->getRequiredWateringsForStage($plant->stage)) {
+            $plant->stage++;
+            $plant->current_watering_count = 0; // Reset watering count for the new stage
+        }
+
         $plant->save();
 
         return back()->with('success', 'Plant watered successfully.');
@@ -57,15 +71,28 @@ class GardenController extends Controller
         return back()->with('success', 'Memo added successfully.');
     }
 
-    private function getDropletsRequired($stage)
+    private function calculateOverallProgress($plant)
+    {
+        $totalWaterings = 10; // Total waterings required to reach full bloom
+        $currentWateringCount = ($plant->stage - 1) * 3 + $plant->current_watering_count;
+
+        // Check if plant is in full bloom stage
+        if ($plant->stage >= 4) {
+            return 100; // Set progress to 100% for full bloom
+        }
+
+        // Calculate the overall progress percentage
+        return ($currentWateringCount / $totalWaterings) * 100;
+    }
+
+    private function getRequiredWateringsForStage($stage)
     {
         switch ($stage) {
             case 1:
-                return 3;
             case 2:
-                return 3;
+                return 3; // To reach next stage
             case 3:
-                return 4;
+                return 4; // To reach full bloom
             default:
                 return 0;
         }
