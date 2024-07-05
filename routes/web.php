@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/garden', [GardenController::class, 'index'])->name('garden.index');
     Route::post('/garden/{plant}/water', [GardenController::class, 'water'])->name('garden.water');
     Route::post('/garden/{plant}/memo', [GardenController::class, 'memo'])->name('garden.memo');
+    Route::delete('/garden/{plant}', [GardenController::class, 'delete'])->name('garden.delete');
+
 });
 //Shop 
 Route::middleware('auth')->group(function () {
@@ -62,9 +64,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/shop/buy', [ShopController::class, 'buy'])->name('shop.buy');
 });
 // About and Fund routes
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+Route::get('/developer', function () {
+    return view('developer');
+})->name('developer');
+
 
 Route::get('/fund', function () {
     return view('fund');

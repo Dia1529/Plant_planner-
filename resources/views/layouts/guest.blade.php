@@ -19,7 +19,7 @@
 </head>
 <body class="font-sans antialiased">
     
-    <div class="min-h-screen flex flex-col justify-center items-center bg-green-100 dark:bg-gray-900">
+    <div class="min-h-screen flex flex-col justify-center items-center bg-white dark:bg-gray-900">
         {{ $slot }}
     </div>
 

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +10,9 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::where('user_id', Auth::id())->get();
+        //$tasks = Task::where('user_id', Auth::id())->get();
+        //return view('tasks.index', compact('tasks'));
+        $tasks = Task::where('user_id', Auth::id())->latest()->paginate(4);
         return view('tasks.index', compact('tasks'));
     }
 

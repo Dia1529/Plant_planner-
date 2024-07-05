@@ -1,8 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
+    <div class="flex justify-between items-center">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
+        <div class="flex items-center space-x-2">
+                <img src="{{ asset('images/icons/droplet.gif') }}" alt="Droplet Icon" class="w-10 h-10">
+                <span class="text-gray-500">{{ auth()->user()->droplet_count }} Droplets</span>
+            </div>
+        </div>
     </x-slot>
 
     <style>
@@ -55,6 +61,13 @@
             transform: translate(-50%, -50%);
             width: 100%;
         }
+        .rights-reserved {
+            margin-top:auto; /* Push the element to the bottom */
+            font-size: 0.9em;
+            color: #6b7280;
+            text-align: center;
+            padding-top: 20px;
+        }
     </style>
 
     <div class="py-6">
@@ -93,6 +106,10 @@
                 </div>
                 
             </div>
+            <div class="rights-reserved">
+                             © 2024 Khine Zar Thwel, Ladia. All rights reserved.
+                            </div>
+        </div>
         </div>
     </div>
 </x-app-layout>

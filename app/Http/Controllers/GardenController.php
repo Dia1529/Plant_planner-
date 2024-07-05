@@ -11,7 +11,7 @@ class GardenController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $plants = $user->plants; // Fetch all plants of the logged-in user
+        $plants = $user->plants()->orderBy('created_at', 'desc')->paginate(6); // Paginate plants with 6 per page
 
         foreach ($plants as $plant) {
             $plant->stageDescription = getPlantStageDescription($plant->stage);
@@ -20,6 +20,21 @@ class GardenController extends Controller
 
         return view('garden.index', compact('plants'));
     }
+    public function delete(Plant $plant)
+{
+    $user = auth()->user();
+
+    // Ensure the plant belongs to the user
+    if ($plant->user_id !== $user->id) {
+        return back()->with('error', 'Unauthorized action.');
+    }
+
+    // Delete the plant
+    $plant->delete();
+
+    return back()->with('success', 'Plant deleted successfully.');
+}
+
 
     public function water(Request $request, Plant $plant)
     {
